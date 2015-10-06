@@ -1,0 +1,434 @@
+=======================================================================
+
+ps -ef|grep 17701
+查看端口为17701的进程，会显示grep这个线程
+
+ps -ef|grep "ulp"|grep -v "grep"
+过滤grep
+
+tail -f st.log
+跟踪日志
+
+kill -9
+杀进程
+
+mkdir 创建文件夹
+
+chmod a+x sort 更改权限
+
+备份：
+cp 原文件名 新文件名
+
+后台执行
+nohup *** >log &
+=======================================================================
+
+AIX KSH shell:
+
+#set -o vi
+
+上滚一条命令是ESC+k
+
+下滚一条命令是ESC+j
+
+自动补全是ESC+\
+
+=======================================================================
+
+Linux下启动WebLogic，让startWebLogic.sh在后台运行的两种方法 
+
+第一种，这种方法最常用：
+
+键入 nohup ./startWebLogic.sh &
+
+第二种，当上面的sh需要与用户交互（比如需要输入用户名，口令），可以这样：
+
+键入 ./startWebLogic.sh
+#进行交互操作 ...
+按下 "ctrl + z"
+输入 "bg" 程序进入后台运行
+
+=======================================================================
+
+打包：进入程序目录 jar -cvf test.jar * 
+解包：jar xf test.jar 
+
+=======================================================================
+chmod +x *.sh
+加权限
+
+netstat -an |grep 231
+查看231过来的连接
+
+netstat -an |grep 8080
+查看端口是否被占用
+
+netstat -nap | grep pid 
+查看进程占用端口
+
+>文件名
+清空文件内容
+
+netstat -tlnp|grep 端口
+lsof -i:端口
+查看占用端口的进程号
+
+ps -ef|grep 进程号
+查看占用端口的程序
+
+too many open files错误
+ulimit -n 20000
+
+=======================================================================
+
+AIX:netstat 	
+netstat -Ana|grep 130.59.10.29
+
+=======================================================================
+vi 命令:
+移动到最后一行：G
+
+查找：/*** 
+n，继续朝同一方向搜索 
+
+N，反方向进行搜索。
+
+i:光标开始前插入
+
+wq!:新文件保存
+=======================================================================
+监控
+nmon
+c:cup
+m:内存
+t：进程
+
+=======================================================================
+tar.gz:
+gzip   -d   file.tar.gz 
+
+tar   xvf   file.tar
+
+示例一：将整个 /etc 目录下的文件全部打包成为 /tmp/etc.tar
+[root@linux ~]# tar -cvf /tmp/etc.tar /etc <==仅打包，不压缩！
+[root@linux ~]# tar -zcvf /tmp/etc.tar.gz /etc <==打包后，以 gzip 压缩
+[root@linux ~]# tar -jcvf /tmp/etc.tar.bz2 /etc <==打包后，以 bzip2 压缩
+
+批量解压tar后缀文件
+find -maxdepth 1 -name "*.tar"|xargs -i tar xf {}
+
+=======================================================================
+
+tar cvf sidproxy231.tar sidproxy/
+
+tar xvf sidproxy231.tar
+
+chmod 755 -R *
+
+ftp 192.168.10.231
+
+ftp> bin
+200 Type set to I.
+
+ftp> get sidproxy231.tar
+
+ftp> dir
+
+ftp> dir
+
+ftp> quit
+
+=======================================================================
+ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+发送公匙：
+ssh weblogic@IP 'mkdir -p .ssh && cat >> .ssh/authorized_keys' < ~/.ssh/id_rsa.pub
+
+.ssh目录为700权限
+authorized_keys 为600权限
+如果权限正确还是需要密码，则可能是SELinux安全模块阻止
+执行getenforce，状态为Enforcing
+setenforce 0在连接试试，如果成功，关闭SELinux
+vi /etc/selinux/config  
+SELINUX=disabled 
+
+=======================================================================
+查看时间
+date +%y/%m/%d-%T
+修改 root权限
+date -u 月日时分年 如 12/04/10-16:25:15  date -u 0410162512
+date -s 06/10/96 修改日期：1996年6月10日
+date -s 13:12:00 修改时间：下午1点12分0秒
+
+=======================================================================
+各种C/C++编译器：
+./configure --without-gtk --without-libIDL --without-x --enable-modules=dbm --disable-elf-dynstr-gc
+
+Solaris:
+env CC=cc CXX=CC ./configure --without-gtk --without-libIDL --without-x --enable-modules=dbm
+
+AIX:
+env CC=xlC_r CXX=xlC_r ./configure --without-gtk --without-libIDL --without-x --enable-modules=dbm
+
+HP-UX:
+env CC=cc CXX=aCC ./configure --without-gtk --without-libIDL --without-x --enable-modules=dbm
+
+OSF1:
+env CC=cc CXX=cxx ./configure --without-gtk --without-libIDL --without-x --enable-modules=dbm
+
+make install uninstall
+=============================================================================================
+ftp命令：
+
+   其中一台Linux安装ftp Server，这样可以另外一台使用ftp的client程序来进行文件的拷贝。
+
+1. 连接ftp服务器 
+　　格式：ftp [hostname| ip-address]
+　　a)在linux命令行下输入：ftp 192.168.26.66
+　　b)服务器询问你用户名和口令，分别输入用户名和相应密码，待认证通过即可。
+
+　2. 下载文件
+
+　　下载文件通常用get和mget这两条命令。
+　　a) get 
+　　格式：get [remote-file] [local-file]
+　　将文件从远端主机中传送至本地主机中.
+　　如要获取服务器上e:\rose\1.bmp,则
+　　ftp> get /rose/1.bmp 1.bmp (回车)
+
+　　b) mget　　　　　　
+　　格式：mget [remote-files]
+　　从远端主机接收一批文件至本地主机.
+　　如要获取服务器上e:\rose\下的所有文件,则
+　　ftp> cd /rose
+　　ftp> mget *.* (回车)
+
+　　注意：文件都下载到了linux主机的当前目录下。比如，在　/root/yint下运行的ftp命令，则文件都下载到了/root/yint下。
+
+　3.上传文件
+
+　　a) put
+　　格式：put local-file [remote-file]
+　　将本地一个文件传送至远端主机中.
+　　如要把本地的1.bmp传送到远端主机e:\rose,并改名为333.bmp
+　　ftp> put 1.bmp /rose/333.bmp (回车)
+
+　　b) mput
+　　格式：mput local-files
+　　将本地主机中一批文件传送至远端主机.
+　　如要把本地当前目录下所有bmp文件上传到服务器e:\rose 下
+　　ftp> cd /rose （回车）
+　　ftp> mput *.bmp　（回车）
+　　注意：上传文件都来自于主机的当前目录下。比如，在　/root/test下运行的ftp命令，则只有在/root/test下的文件linux才会上传到服务器e:\rose 下。
+
+　4. 断开连接
+　　bye：中断与服务器的连接。
+　　ftp> bye (回车)
+=============================================================================================
+SCP命令：
+
+   scp是安全的文件拷贝，基于ssh的登录
+
+   假定你想把本地计算机/home下的一个名为a.tar.tz的文件拷贝到远程服务器192.168.0.2上的/home/tmp。而且你在远程服务器上的帐号名为root。可以用这个命令： 
+scp /home/a.tar.tz root@192.168.0.2:/home/tmp/
+
+如果把文件从远程机器拷贝到本机当前目录用这个命令： 
+   scp root@192.168.0.2:/home/a.tar.tz 
+
+   拷贝远程机器的整个目录下的文件
+   scp -r root@192.168.0.2：/home/* ./
+   
+============================================================================================
+Linux 统计文件夹大小
+du -h --max-depth=1 /path
+du -sh /*
+
+搜索大于100M的文件
+find / -type f -size +100M|xargs ls -l
+
+df 查看硬盘
+df -T -h 查看文件系统格式等详细信息
+============================================================================================
+cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c 
+      8  Intel(R) Xeon(R) CPU            E5410   @ 2.33GHz 
+(看到有8个逻辑CPU, 也知道了CPU型号) 
+
+cat /proc/cpuinfo | grep physical | uniq -c 
+      4 physical id      : 0 
+      4 physical id      : 1 
+(说明实际上是两颗4核的CPU) 
+
+getconf LONG_BIT 
+   32 
+(说明当前CPU运行在32bit模式下, 但不代表CPU不支持64bit) 
+
+cat /proc/cpuinfo | grep flags | grep ' lm ' | wc -l 
+   8 
+(结果大于0, 说明支持64bit计算. lm指long mode, 支持lm则是64bit) 
+
+
+再完整看cpu详细信息, 不过大部分我们都不关心而已. 
+dmidecode | grep 'Processor Information' 
+
+查看内 存信息 
+cat /proc/meminfo 
+
+uname -a 
+Linux euis1 2.6.9-55.ELsmp #1 SMP Fri Apr 20 17:03:35 EDT 2007 i686 i686 i386 GNU/Linux 
+(查看当前操作系统内核信息) 
+
+lsb_release -a
+查看系统详细信息
+
+cat /etc/issue | grep Linux 
+Red Hat Enterprise Linux AS release 4 (Nahant Update 5) 
+(查看当前操作系统发行版信息) 
+
+查看机器型号 
+dmidecode | grep "Product Name"  
+
+查看网卡信息 
+dmesg | grep -i eth
+
+查看进程能开打文件数
+ulimit -n
+
+修改进程能打开文件数
+第一个是内核参数　fs.file-max  ，影射为 /proc/sys/fs/file-max
+第二个是配置文件 /etc/security/limits.conf
+
+如果不能修改：
+WARNING: The file has been changed since reading it!!!
+echo 65536 > /proc/sys/fs/file-max
+
+查看是否是虚拟机
+lspci -b 
+VMware 字样的设备，有显卡、USB控制器等等
+
+==========================================================
+ps -ef|grep java|grep -v "grep" |awk -F " " '{print $2}'
+只输出进程号
+
+jps |grep NameNode | awk -F " " '{print $1}'
+输出jps含有NameNode的进程号
+
+jps |grep HRegionServer | awk -F " " '{print $1}' | xargs kill -9
+杀死包含HMaster的进程
+
+==========================================================
+ntpdate 210.167.182.10
+ntpdate -d 210.167.182.10
+ntpdate -u 210.167.182.10
+ntpdate -d -u 210.167.182.10
+时间同步，root
+
+service没找到
+su - root
+==========================================================
+HP-UX 不能输入@
+stty kill '^X'
+==========================================================
+在linux下查看进程大家都会想到用    ps    -ef|grep    XXX 
+
+可是看到的不是全路径,怎么看全路径呢? 
+每个进程启动之后在 /proc 下面有一个于 pid 对应的路径 
+例如:    ps    -ef|grep    python 
+显示:    oracle    4431    4366    0    18:56    pts/2    00:00:00    python    Server.py 
+4431 就是进程号 
+
+到 /proc/4431 下, ls    -l  会看到
+==========================================================
+linux zip 命令详解 
+功能说明：压缩文件。 
+
+linux unzip 命令详解
+功能说明：解压缩zip文件
+unzip ***.zip -d 目录 解压到某个目录
+==========================================================
+cat a b | sort | uniq > c   # c 是a和b的合集
+cat a b | sort | uniq -d > c   # c 是a和b的交集
+cat a b b | sort | uniq -u > c   # c 是a和b的不同
+==========================================================
+汇总一个文本内容里第三列数字的和：
+awk ‘{ x += $3 } END { print x }’ myfile
+
+如果你想查看一个目录树里的文件的体积和修改日期，用下面的方法，相当于你挨个目录做”ls -l”，而且输出的形式比你用”ls -lR”更可读：
+find . -type f -ls
+
+使用xargs命令。这个命令非常的强大。注意每行上你可以控制多少个东西的执行。如果你不确定它是正确的执行，先使用xargs echo。同样，-I{} 也非常有用。例子：
+find . -name \*.py | xargs grep some_function
+
+cat hosts | xargs -I{} ssh root@{} hostname
+
+假设你有一个文本文件，比如一个web服务器日志，在某些行上有一些值，比如URL中的acct_id参数。如果你想统计每个acct_id的所有请求记录：
+cat access.log | egrep -o ‘acct_id=[0-9]+’ | cut -d= -f2 | sort | uniq -c | sort -rn
+
+cat error.log | grep -C 5 'nick' 显示file文件里匹配foo字串那行以及上下5行
+cat error.log | grep -B 5 'nick' 显示foo及前5行
+cat error.log | grep -A 5 'nick' 显示foo及后5行
+
+匹配invoke time out. method的行，以:分割，统计输出第3列
+cat pay-info.log.2015-09-20 |grep  'invoke time out. method' |  awk -F ':' '{ print $3 }' |sort|uniq -c
+结果：
+530  findAllValidPaymentMethodsarguments
+116  getPaymentInfoarguments
+ 16  getWapCheckstandDataarguments
+  8  getWapCheckstandTokenarguments
+ 35  queryTradePaymentInfoByTradeNoarguments
+ 34  validateTradeCustomStatusarguments
+
+cat 1.log | grep "耗时" |awk -F '，' '{ print $2 }' |awk -F '[0-9]' '{ print $1 }' |sort|uniq -c
+5931 显示收银台界面耗时
+5931 解析并保存订单支付请求耗时
+   3 调用支付宝接口查询交易状态耗时
+5931 跳转支付收银台界面请求参数生成耗时
+
+cat 1.log | grep -c "耗时"
+17796
+
+耗时大于1000ms显示全行
+awk -F '，|耗时|ms' '{if($3>1000){print $0}}' 2.log
+
+如数据：
+[WARN]: 		Time4DebugUtil计时结果，调用支付宝接口查询交易状态耗时199ms，trackId=d2ee1eda5b9d4a5eabe84a5735194a2d
+[DEBUG]: Time4DebugUtil计时结果，解析并保存订单支付请求耗时53ms，trackId=ba32ffbdff6a4e55b2d15208a7d8a952
+[WARN]: Time4DebugUtil计时结果，显示收银台界面耗时113ms，trackId=1999e0e1066a4f75b5f1405d02d35ca9
+[DEBUG]: Time4DebugUtil计时结果，解析并保存订单支付请求耗时48ms，trackId=6bac9e3245294c85991822de09716386
+显示耗时大于1000小于1500统计信息
+cat 2.log | grep "耗时" | awk -F '，|耗时|ms' '{if($3>1000&&$3<1500){print $2}}' |sort|uniq -c
+   2905 解析并保存订单支付请求
+   1128 跳转支付收银台界面请求参数生成
+    737 显示收银台界面
+
+
+统计异常信息
+cat 2.log |grep 'Exception' |  awk -F ':' '{ print $1 }' |sort|uniq -c
+
+匹配耗时显示前面10行
+cat 2.log | grep "耗时" |head -n 10
+
+===========================================================
+make uninstall
+
+===========================================================
+
+service NetworkManager stop
+service network start
+chkconfig NetworkManager off
+chkconfig network on
+===========================================================
+hostname controller
+/etc/sysconfig/network HOSTNAME=controller
+/etc/hosts
+===========================================================
+DEVICE=eth0
+TYPE=Ethernet
+BOOTPROTO=static
+IPADDR=192.168.0.10
+NETMASK=255.255.255.0
+DEFROUTE=yes
+ONBOOT=yes
+
+===========================================================
+查看大文件命令
+grep '关键字' 文件名 | tail -5
+查找文件的关键字，显示最后5次 
