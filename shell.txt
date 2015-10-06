@@ -405,12 +405,18 @@ cat 2.log |grep 'Exception' |  awk -F ':' '{ print $1 }' |sort|uniq -c
 
 匹配耗时显示前面10行
 cat 2.log | grep "耗时" |head -n 10
+==========================================================
+汇总一个文本内容里第三列数字的和：
+awk ‘{ x += $3 } END { print x }’ myfile
 
+如果你想查看一个目录树里的文件的体积和修改日期，用下面的方法，相当于你挨个目录做”ls -l”，而且输出的形式比你用”ls -lR”更可读：
+find . -type f -ls
+
+使用xargs命令。这个命令非常的强大。注意每行上你可以控制多少个东西的执行。如果你不确定它是正确的执行，先使用xargs echo。同样，-I{} 也非常有用。例子：
+find . -name \*.py | xargs grep some_function
+
+cat hosts | xargs -I{} ssh root@{} hostname
 ===========================================================
-make uninstall
-
-===========================================================
-
 service NetworkManager stop
 service network start
 chkconfig NetworkManager off
@@ -427,8 +433,22 @@ IPADDR=192.168.0.10
 NETMASK=255.255.255.0
 DEFROUTE=yes
 ONBOOT=yes
-
 ===========================================================
 查看大文件命令
 grep '关键字' 文件名 | tail -5
 查找文件的关键字，显示最后5次 
+===========================================================
+使用chown命令可以修改文件或目录所属的用户：
+
+       命令：chown 用户 目录或文件名
+
+       例如：chown qq /home/qq  (把home目录下的qq目录的拥有者改为qq用户) 
+
+使用chgrp命令可以修改文件或目录所属的组：
+
+       命令：chgrp 组 目录或文件名
+
+       例如：chgrp qq /home/qq  (把home目录下的qq目录的所属组改为qq组)
+===========================================================
+安装nginx
+./configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=zk --group=root --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module --with-mail --with-mail_ssl_module --with-file-aio --with-http_spdy_module --with-ipv6
